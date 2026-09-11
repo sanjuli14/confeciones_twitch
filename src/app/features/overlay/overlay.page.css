@@ -12,6 +12,30 @@ main {
   background: transparent;
 }
 
+.camera-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Nombre + @ Twitch del streamer, DEBAJO de la cámara (el video la tapa por dentro) */
+.camera-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.35rem 1.25rem;
+  border-radius: 0.75rem;
+  background: rgba(11, 7, 22, 0.6);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 92, 157, 0.3);
+  box-shadow: 0 10px 28px -14px rgba(0, 0, 0, 0.85);
+  color: #fff;
+  user-select: none;
+  pointer-events: none;
+}
+
 .camera-box {
   width: 100%;
   aspect-ratio: 16 / 9;

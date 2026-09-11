@@ -6,16 +6,22 @@
   <!-- Cámaras de los streamers (la derecha hacia abajo) -->
   <div class="absolute right-0 top-6 flex flex-col gap-8 w-[420px]">
     @for (slot of cameraSlots; track slot) {
-      <div class="camera-box">
-        <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
+      <div class="camera-slot">
+        <div class="camera-box">
+          <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
+        </div>
         @if (streamerFor(slot); as st) {
-          <span class="font-script text-4xl break-words">{{ st.name }}</span>
-          <span class="text-2xl text-soft inline-flex items-center gap-1.5 break-all">
-            <lucide-angular [img]="AtSign" [size]="20" />
-            {{ st.twitch_handle }}
-          </span>
+          <div class="camera-label">
+            <span class="font-script text-3xl leading-none break-words text-center">{{ st.name }}</span>
+            <span class="text-xl text-soft inline-flex items-center gap-1.5 break-all">
+              <lucide-angular [img]="AtSign" [size]="18" />
+              {{ st.twitch_handle }}
+            </span>
+          </div>
         } @else {
-          <span class="font-script text-4xl">Cámara {{ slot }}</span>
+          <div class="camera-label">
+            <span class="text-xl text-white/60 font-semibold tracking-wide">Cámara {{ slot }}</span>
+          </div>
         }
       </div>
     }

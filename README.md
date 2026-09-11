@@ -1,59 +1,51 @@
-# ConfecionesTwitch
+# Consultorio del Amor 💘
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.7.
+App **Angular 22 + Supabase** para que los viewers de Twitch envíen confesiones anónimas, el admin las modere y el streamer las saque a pantalla bajo demanda en un overlay de OBS (1920×1080).
+
+## Rutas
+
+| Ruta | Función |
+|------|---------|
+| `/enviar` | Formulario anónimo del chat (categoría, título, confesión, pseudónimo) |
+| `/admin/login` | Acceso restringido del panel |
+| `/admin` | Panel de moderación: Pendientes / En cola / Rechazadas |
+| `/overlay` | Overlay para OBS: "En cola: N" + **Traer siguiente** |
+
+## Flujo
+
+1. Un viewer envía su confesión 100% anónima (vía RPC `submit_confession`).
+2. El **admin aprueba/rechaza** desde el panel (los contadores son exactos).
+3. Aprobadas sin mostrar van a la **cola**.
+4. El **streamer** pulsa **Traer siguiente** en el overlay → `mark_confession_shown()` marca atómicamente la más antigua y sale a pantalla.
+
+## Requisitos
+
+- Node 22+ y Angular CLI (`npm i -g @angular/cli`)
+- Proyecto Supabase con tabla `confessions` y las funciones/políticas de `supabase/migracion_simplificada.sql` (ejecutar en el SQL Editor — es idempotente)
+- Credenciales en `src/environments/environment.development.ts`
 
 ## Development server
 
-To start a local development server, run:
-
 ```bash
-ng serve
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Servidor en `http://localhost:4200/` (recarga automática).
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Build
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+El build de producción sale en `dist/confeciones_twitch/` (prereneriza `/enviar`).
 
-## Running unit tests
+## OBS
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Agregar una fuente **Browser Source** con:
 
-```bash
-ng test
-```
+- URL: `http://localhost:4200/overlay`
+- Ancho 1920, Alto 1080, fondo transparente
+- Contar el botón **Traer siguiente** con el mouse (o un Hotkey/stream deck si prefieres)
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+> Nota: el overlay solo se ve en pantalla si hay al menos una confesión aprobada en cola.

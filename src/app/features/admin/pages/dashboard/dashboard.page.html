@@ -16,7 +16,7 @@
     <div class="min-w-0">
       <h1 class="font-display font-bold text-3xl sm:text-4xl flex items-center gap-2.5 drop-shadow-[0_0_20px_rgba(255,46,136,0.35)]">
         <lucide-angular [img]="Heart" [size]="28" class="text-heart shrink-0 drop-shadow-[0_0_12px_rgba(255,46,136,0.8)]" />
-        <span class="truncate">Panel del <span class="glow-text">Doctor Amor</span></span>
+        <span class="truncate">Panel de <span class="glow-text">Jevitas y Tarros</span></span>
       </h1>
       <p class="text-base text-white/60 truncate">{{ userEmail() }}</p>
     </div>
@@ -66,6 +66,67 @@
           <p class="text-3xl font-display font-bold leading-none">{{ counts().rejected }}</p>
           <p class="text-base text-white/60 mt-1">Rechazadas</p>
         </div>
+      </div>
+    </section>
+
+    <!-- Streamers -->
+    <section class="glass p-6 space-y-5" aria-label="Streamers en pantalla">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h2 class="font-display font-bold text-2xl inline-flex items-center gap-2.5">
+            <lucide-angular [img]="Camera" [size]="24" class="text-soft" />
+            Streamers en pantalla
+          </h2>
+          <p class="text-base text-white/60 mt-1">
+            Nombre y @ de Twitch del streamer principal e invitados. Aparecen bajo la cámara del overlay.
+          </p>
+        </div>
+        <button
+          (click)="saveStreamers()"
+          [disabled]="saving()"
+          class="btn-glow px-5 py-2.5 text-sm inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <lucide-angular [img]="Save" [size]="18" />
+          {{ saving() ? 'Guardando…' : 'Guardar' }}
+        </button>
+      </div>
+
+      @if (saveError()) {
+        <p class="text-base text-flame border border-flame/30 bg-flame/10 rounded-lg px-4 py-2">
+          {{ saveError() }}
+        </p>
+      }
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        @for (draft of streamerDrafts(); track draft.slot) {
+          <div class="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
+            <p
+              class="text-sm font-semibold text-white/70 uppercase tracking-widest inline-flex items-center gap-2"
+            >
+              <lucide-angular [img]="Camera" [size]="16" class="text-soft" />
+              Cámara {{ draft.slot }}
+            </p>
+            <input
+              [value]="draft.name"
+              placeholder="Nombre del streamer"
+              [attr.aria-label]="'Nombre del streamer de la cámara ' + draft.slot"
+              (input)="updateStreamerDraft(draft.slot, 'name', $any($event.target).value)"
+              class="input-glass w-full"
+            />
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-soft" aria-hidden="true">
+                <lucide-angular [img]="AtSign" [size]="16" />
+              </span>
+              <input
+                [value]="draft.twitch_handle"
+                placeholder="usuario_de_twitch"
+                [attr.aria-label]="'Usuario de Twitch de la cámara ' + draft.slot"
+                (input)="updateStreamerDraft(draft.slot, 'twitch_handle', $any($event.target).value)"
+                class="input-glass w-full pl-9"
+              />
+            </div>
+          </div>
+        }
       </div>
     </section>
 

@@ -1,8 +1,8 @@
 import { Component, inject, signal, computed, effect, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { LucideAngularModule, Camera, Heart, Play, ListOrdered, ChevronDown, ChevronUp } from 'lucide-angular';
+import { LucideAngularModule, Camera, Heart, Play, ListOrdered, ChevronDown, ChevronUp, AtSign } from 'lucide-angular';
 import { OverlayStateService } from '../../core/services/overlay-state.service';
-import { categoryLabel } from '../../core/models/types';
+import { categoryLabel, Streamer } from '../../core/models/types';
 
 const STAGE_W = 1920;
 const STAGE_H = 1080;
@@ -28,10 +28,19 @@ export class OverlayPage implements OnDestroy {
   readonly ListOrdered = ListOrdered;
   readonly ChevronDown = ChevronDown;
   readonly ChevronUp = ChevronUp;
+  readonly AtSign = AtSign;
 
   /** Confesión actualmente en pantalla (la trae el streamer). */
   readonly current = this.state.current;
   readonly queueLength = this.state.queueLength;
+
+  /** Posiciones de cámara disponibles en el overlay. */
+  protected readonly cameraSlots = [1, 2, 3] as const;
+
+  /** Streamer asignado a una cámara. */
+  protected streamerFor(slot: number): Streamer | undefined {
+    return this.state.streamers().find((s) => s.slot === slot);
+  }
 
   /** Evita doble clic mientras se está trayendo la siguiente. */
   readonly bringing = signal(false);

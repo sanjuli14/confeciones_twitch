@@ -3,20 +3,22 @@
   style="transform-origin: center center"
   class="w-[1920px] h-[1080px] overflow-hidden relative flex items-center justify-center"
 >
-  <!-- Cámaras de los streamers (espacios reservados, a la derecha hacia abajo) -->
+  <!-- Cámaras de los streamers (la derecha hacia abajo) -->
   <div class="absolute right-0 top-6 flex flex-col gap-8 w-[420px]">
-    <div class="camera-box">
-      <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
-      <span class="font-script text-4xl">Cámara 1</span>
-    </div>
-    <div class="camera-box">
-      <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
-      <span class="font-script text-4xl">Cámara 2</span>
-    </div>
-    <div class="camera-box">
-      <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
-      <span class="font-script text-4xl">Cámara 3</span>
-    </div>
+    @for (slot of cameraSlots; track slot) {
+      <div class="camera-box">
+        <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
+        @if (streamerFor(slot); as st) {
+          <span class="font-script text-4xl break-words">{{ st.name }}</span>
+          <span class="text-2xl text-soft inline-flex items-center gap-1.5 break-all">
+            <lucide-angular [img]="AtSign" [size]="20" />
+            {{ st.twitch_handle }}
+          </span>
+        } @else {
+          <span class="font-script text-4xl">Cámara {{ slot }}</span>
+        }
+      </div>
+    }
   </div>
 
   <!-- Control del streamer: traer la siguiente confesión de la cola -->
@@ -89,9 +91,9 @@
           class="relative text-white drop-shadow-[0_0_40px_rgba(255,46,136,0.7)]"
         />
       </div>
-      <p class="font-script text-9xl text-white drop-shadow-[0_0_30px_rgba(255,46,136,0.5)]">
-        Consultorio del Amor
-      </p>
+<p class="font-script text-9xl text-white drop-shadow-[0_0_30px_rgba(255,46,136,0.5)]">
+          Jevitas y Tarros
+        </p>
       <p class="text-2xl text-white/60 font-body">
         Esperando a que el streamer traiga la primera confesión…
       </p>

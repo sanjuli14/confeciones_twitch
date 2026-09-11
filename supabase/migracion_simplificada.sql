@@ -109,3 +109,41 @@ WITH CHECK (status = 'pending');
 SELECT column_name FROM information_schema.columns
 WHERE table_schema = 'public' AND table_name = 'confessions'
 ORDER BY ordinal_position;
+
+-- ============================================================
+-- 9. Streamers del overlay (nombre + @ de Twitch por cámara)
+--    El admin los gestiona desde el panel; el overlay los muestra
+--    bajo cada cámara. slot 1..3 = posición en el overlay.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.streamers (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL DEFAULT '',
+  twitch_handle text NOT NULL DEFAULT '',
+  slot int NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS streamers_slot_key ON public.streamers (slot);
+
+ALTER TABLE public.streamers ENABLE ROW LEVEL SECURITY;
+
+-- anon solo lee (lo necesita el overlay sin sesión)
+DROP POLICY IF EXISTS "anon read streamers" ON public.streamers;
+CREATE POLICY "anon read streamers"
+ON public.streamers
+FOR SELECT
+TO anon
+USING (true);
+
+-- el admin (rol authenticated) gestiona todo
+DROP POLICY IF EXISTS "authenticated manage streamers" ON public.streamers;
+CREATE POLICY "authenticated manage streamers"
+ON public.streamers
+FOR ALL
+TO authenticated
+USING (true)
+WITH CHECK (true);
+
+GRANT SELECT ON public.streamers TO anon;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.streamers TO authenticated;

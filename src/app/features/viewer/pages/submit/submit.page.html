@@ -64,7 +64,7 @@
           </h1>
 
           <p class="text-xl sm:text-2xl text-white/90 mt-5">
-            Cuéntanos tu historia de forma 100% anónima. El Doctor Amor la leerá en directo.
+            Cuéntanos tu historia de forma 100% anónima. Los que más saben del tema la leerán en directo.
           </p>
         </header>
 
@@ -193,9 +193,31 @@
         <p
           class="text-center font-script text-3xl text-rose/90 mt-7 drop-shadow-[0_0_18px_rgba(255,46,136,0.4)]"
         >
-          Sé valiente, el Doctor Amor está escuchando…
+          Sé valiente, los que más saben del tema están escuchando…
         </p>
       </div>
     }
   </div>
+
+  <!-- Redes del streamer -->
+  <footer class="relative z-10 w-full max-w-lg mx-auto mt-8">
+    <p
+      class="text-center font-script text-2xl text-rose/80 mb-4 drop-shadow-[0_0_16px_rgba(255,46,136,0.35)]"
+    >
+      Sígueme y vé el directo
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-2.5">
+      @for (social of socials; track social.href) {
+        <a
+          [href]="social.href"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-heart/50 hover:bg-heart/10 hover:text-white active:scale-95"
+        >
+          <lucide-angular [img]="social.icon" [size]="16" class="shrink-0 text-soft" />
+          <span class="break-all">{{ social.label }}</span>
+        </a>
+      }
+    </div>
+  </footer>
 </div>

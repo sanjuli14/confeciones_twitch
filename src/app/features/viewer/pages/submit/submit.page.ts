@@ -10,6 +10,10 @@ import {
   Flag,
   HeartOff,
   Skull,
+  Twitch,
+  Instagram,
+  Youtube,
+  AtSign,
 } from 'lucide-angular';
 import { SupabaseService } from '../../../../core/services/supabase.service';
 import { CATEGORIES } from '../../../../core/models/types';
@@ -27,6 +31,30 @@ export class SubmitPage {
   readonly Send = Send;
   readonly Lock = Lock;
   readonly Heart = Heart;
+  readonly Twitch = Twitch;
+  readonly Instagram = Instagram;
+  readonly Youtube = Youtube;
+  readonly AtSign = AtSign;
+
+  /** Redes del streamer (Jevitas y Tarros). */
+  readonly socials = [
+    {
+      label: '@osmineeeee',
+      icon: Twitch,
+      href: 'https://www.twitch.tv/osmineeeee',
+    },
+    { label: '@osmineeee', icon: Instagram, href: 'https://www.instagram.com/osmineeee' },
+    {
+      label: '@osmine_clips_',
+      icon: Instagram,
+      href: 'https://www.instagram.com/osmine_clips_',
+    },
+    {
+      label: 'Osmineeeee',
+      icon: Youtube,
+      href: 'https://youtube.com/@Osmineeeee',
+    },
+  ];
 
   readonly categories = CATEGORIES;
 

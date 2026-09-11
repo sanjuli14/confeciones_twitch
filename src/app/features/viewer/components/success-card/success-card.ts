@@ -44,8 +44,8 @@ import { LucideAngularModule, MessageSquareHeart, Heart, Sparkles } from 'lucide
         </h2>
 
         <p class="text-xl sm:text-2xl text-white/90 mb-8 leading-relaxed">
-          Tu historia ha sido enviada al
-          <span class="font-script text-3xl text-rose">Doctor Amor</span>. Espera a que la lea en
+          Tu historia ha sido enviada a
+          <span class="font-script text-3xl text-rose">Jevitas y Tarros</span>. Espera a que la lean en
           directo
         </p>
 

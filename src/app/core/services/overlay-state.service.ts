@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject, DestroyRef, afterNextRender } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { Confession } from '../models/types';
+import { Confession, Streamer } from '../models/types';
 
 @Injectable({ providedIn: 'root' })
 export class OverlayStateService {
@@ -14,6 +14,9 @@ export class OverlayStateService {
   readonly queue = signal<Confession[]>([]);
 
   readonly queueLength = computed(() => this.queue().length);
+
+  /** Streamers configurados (nombre + @ Twitch) por cámara. */
+  readonly streamers = signal<Streamer[]>([]);
 
   private channel: ReturnType<SupabaseService['supabase']['channel']> | null = null;
   private connected = false;
@@ -43,7 +46,15 @@ export class OverlayStateService {
   }
 
   private async load(): Promise<void> {
-    await Promise.all([this.loadCurrent(), this.loadQueue()]);
+    await Promise.all([this.loadCurrent(), this.loadQueue(), this.loadStreamers()]);
+  }
+
+  private async loadStreamers(): Promise<void> {
+    const { data, error } = await this.supabase.supabase
+      .from('streamers')
+      .select('*')
+      .order('slot', { ascending: true });
+    if (!error) this.streamers.set((data as Streamer[]) ?? []);
   }
 
   private async loadCurrent(): Promise<void> {
@@ -76,6 +87,13 @@ export class OverlayStateService {
         { event: '*', schema: 'public', table: 'confessions' },
         () => {
           void this.load();
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'streamers' },
+        () => {
+          void this.loadStreamers();
         },
       )
       .subscribe();

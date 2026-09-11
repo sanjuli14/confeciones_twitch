@@ -11,6 +11,15 @@ export interface Confession {
   shown_at?: string | null;
 }
 
+export interface Streamer {
+  id: string;
+  name: string;
+  twitch_handle: string;
+  slot: number;
+}
+
+export const STREAMER_SLOTS = [1, 2, 3] as const;
+
 export const CATEGORIES = [
   { id: 'amor', label: 'Amor' },
   { id: 'desamor', label: 'Confesión vergonzosa' },

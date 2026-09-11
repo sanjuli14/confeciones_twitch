@@ -15,10 +15,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@ngx-env/builder:application",
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "ngxEnv": {},
             "assets": [
               {
                 "glob": "**/*",
@@ -32,7 +33,8 @@
               "allowedHosts": [
                 "localhost",
                 "localhost:4000",
-                "127.0.0.1:4000"
+                "127.0.0.1:4000",
+                "*.vercel.app"
               ]
             },
             "ssr": {
@@ -70,7 +72,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@ngx-env/builder:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "confeciones_twitch:build:production"

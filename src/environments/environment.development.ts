@@ -2,7 +2,7 @@ import { Environment } from './environment.model';
 
 export const environment: Environment = {
   production: false,
-  supabaseUrl: 'https://fsoewwkvnjkaygdnornl.supabase.co',
-  supabaseAnonKey: 'sb_publishable_ic4yqCS9OGRMUd_5PEc0DA_3di15ZNi',
+  supabaseUrl: import.meta.env.NG_APP_SUPABASE_URL ?? '',
+  supabaseAnonKey: import.meta.env.NG_APP_SUPABASE_ANON_KEY ?? '',
   appName: 'Consultorio del Amor',
 };

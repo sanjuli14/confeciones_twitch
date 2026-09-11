@@ -2,7 +2,7 @@ import { Environment } from './environment.model';
 
 export const environment: Environment = {
   production: true,
-  supabaseUrl: 'TU_URL_SUPABASE',
-  supabaseAnonKey: 'TU_ANON_KEY',
+  supabaseUrl: import.meta.env.NG_APP_SUPABASE_URL ?? '',
+  supabaseAnonKey: import.meta.env.NG_APP_SUPABASE_ANON_KEY ?? '',
   appName: 'Consultorio del Amor',
 };

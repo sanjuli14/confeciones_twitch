@@ -1,0 +1,88 @@
+<div class="scene-bg min-h-dvh flex items-center justify-center px-4 py-10">
+  <!-- Blobs de luz animados -->
+  <div
+    class="blob w-[320px] h-[320px] bg-heart/25 left-[-110px] top-[8%]"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="blob w-[380px] h-[380px] bg-[#3b2d7a]/50 right-[-120px] bottom-[10%]"
+    style="animation-delay: -7s"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Corazones flotantes decorativos -->
+  <div class="heart-float right-[9%] top-[14%]" style="animation-delay: -3s" aria-hidden="true">
+    <lucide-angular [img]="Heart" [size]="22" class="text-rose" />
+  </div>
+  <div class="heart-float left-[9%] bottom-[16%]" style="animation-delay: -6s" aria-hidden="true">
+    <lucide-angular [img]="Heart" [size]="18" class="text-soft" />
+  </div>
+
+  <div class="relative z-10 w-full max-w-sm animate-[card-in_.6s_ease-out]">
+    <div class="text-center mb-8">
+      <div class="relative inline-flex items-center justify-center mb-5" aria-hidden="true">
+        <div class="absolute inset-0 rounded-full bg-heart/50 blur-2xl"></div>
+        <div
+          class="relative w-[72px] h-[72px] rounded-full bg-gradient-to-br from-rose via-heart to-[#7c3aed] flex items-center justify-center rotate-3 shadow-[0_0_36px_-6px_rgba(255,46,136,0.85)]"
+        >
+          <lucide-angular
+            [img]="Heart"
+            [size]="34"
+            class="text-white fill-white/90 -rotate-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]"
+          />
+        </div>
+      </div>
+
+      <h1
+        class="text-4xl sm:text-5xl font-display font-bold leading-tight drop-shadow-[0_0_24px_rgba(255,46,136,0.35)]"
+      >
+        Panel del <span class="glow-text">Doctor Amor</span>
+      </h1>
+      <p class="font-script text-3xl text-soft/80 mt-1">Acceso restringido</p>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="glass p-6 space-y-4"
+    >
+      @if (error()) {
+        <div class="text-base text-flame bg-flame/10 border border-flame/30 rounded-lg px-4 py-3">
+          {{ error() }}
+        </div>
+      }
+
+      <div>
+        <label for="email" class="block text-base font-semibold text-white/90 mb-2">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          class="input-glass"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="block text-base font-semibold text-white/90 mb-2">
+          Contraseña
+        </label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          class="input-glass"
+        />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="form.invalid || loading()"
+        class="btn-glow w-full py-3.5 text-lg"
+      >
+        {{ loading() ? 'Entrando…' : 'Iniciar sesión' }}
+      </button>
+    </form>
+  </div>
+</div>

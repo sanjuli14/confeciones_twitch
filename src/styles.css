@@ -1,1 +1,237 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss';
+
+@theme {
+  --color-heart: #ff2e88;
+  --color-leaf: #20e08a;
+  --color-flame: #ff6a3d;
+  --color-night: #0b0716;
+  --color-panel: #17102a;
+  --color-neon: #a78bfa;
+  --color-ink: #07040f;
+  --color-rose: #ff5c9d;
+  --color-soft: #c7b7ff;
+  --font-display: 'Changa One', sans-serif;
+  --font-body: 'DynaPuff', 'Loved by the King', cursive;
+  --font-script: 'Loved by the King', cursive;
+}
+
+.loved-by-the-king-regular {
+  font-family: 'Loved by the King', cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.changa-one-regular {
+  font-family: 'Changa One', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.changa-one-regular-italic {
+  font-family: 'Changa One', sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.dynapuff-regular {
+  font-family: 'DynaPuff', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  @apply bg-night text-white font-body antialiased;
+}
+
+/* El overlay de OBS necesita fondo transparente: cuerpo sin pintar */
+body:has(app-overlay) {
+  background-color: transparent;
+}
+
+* {
+  @apply box-border;
+}
+
+/* ---------- keyframes ---------- */
+@keyframes blob-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(46px, -58px, 0) scale(1.18);
+  }
+}
+
+@keyframes heart-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-10deg) scale(1);
+    opacity: 0.1;
+  }
+  50% {
+    transform: translateY(-34px) rotate(12deg) scale(1.08);
+    opacity: 0.22;
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(36px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heart-rise {
+  0% {
+    transform: translateY(0) scale(0.7);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-170px) scale(1.05);
+    opacity: 0;
+  }
+}
+
+/* ---------- scrollbar & selection ---------- */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(167, 139, 250, 0.28);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 46, 136, 0.5);
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::selection {
+  background: rgba(255, 46, 136, 0.55);
+  color: #fff;
+}
+
+/* ---------- reusable components ---------- */
+@layer components {
+  /* Escena nocturna: degradados en radial + grano + base cinematográfica */
+  .scene-bg {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-ink);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),
+      radial-gradient(55% 45% at 82% 6%, rgba(255, 46, 136, 0.16), transparent 62%),
+      radial-gradient(50% 44% at 10% 90%, rgba(104, 78, 184, 0.32), transparent 64%),
+      radial-gradient(42% 40% at 58% 50%, rgba(167, 139, 250, 0.12), transparent 60%),
+      radial-gradient(32% 30% at 25% 12%, rgba(255, 92, 157, 0.1), transparent 60%),
+      linear-gradient(180deg, #140a26 0%, #0b0716 45%, #07040f 100%);
+    background-size:
+      180px 180px,
+      auto,
+      auto,
+      auto,
+      auto,
+      auto;
+  }
+
+  /* Blob de luz animado (decorativo) */
+  .blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    pointer-events: none;
+    will-change: transform;
+    animation: blob-float 16s ease-in-out infinite alternate;
+  }
+
+  /* Corazón decorativo flotando (viewer) */
+  .heart-float {
+    position: absolute;
+    pointer-events: none;
+    animation: heart-float 9s ease-in-out infinite;
+  }
+
+  /* Panel glass con borde neón translúcido y resplandor exterior */
+  .glass {
+    @apply bg-panel/60 backdrop-blur-xl border border-neon/20 rounded-2xl;
+    box-shadow:
+      0 30px 60px -25px rgba(5, 2, 12, 0.9),
+      0 0 40px -12px rgba(255, 46, 136, 0.28);
+  }
+
+  /* Texto con gradiente rosa→violeta */
+  .glow-text {
+    @apply bg-gradient-to-r from-rose via-heart to-neon bg-clip-text text-transparent;
+  }
+
+  /* Botón primario con gradiente y brillo */
+  .btn-glow {
+    @apply inline-flex items-center justify-center gap-2 text-white font-semibold rounded-xl text-xl;
+    background-image: linear-gradient(135deg, #ff5c9d 0%, #ff2e88 45%, #a78bfa 100%);
+    box-shadow:
+      0 0 24px -6px rgba(255, 46, 136, 0.6),
+      0 10px 30px -10px rgba(255, 46, 136, 0.4);
+    transition: box-shadow 0.25s ease, filter 0.25s ease, transform 0.15s ease;
+  }
+  .btn-glow:hover {
+    box-shadow:
+      0 0 36px -4px rgba(255, 46, 136, 0.85),
+      0 14px 36px -12px rgba(255, 46, 136, 0.5);
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+  .btn-glow:active {
+    transform: scale(0.96);
+  }
+  .btn-glow:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    filter: none;
+    box-shadow: none;
+  }
+  .btn-glow:focus-visible {
+    outline: 2px solid rgba(167, 139, 250, 0.8);
+    outline-offset: 2px;
+  }
+
+  /* Botón secundario fantasma */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 text-white/70 font-semibold transition-all duration-200;
+  }
+  .btn-ghost:hover {
+    @apply border-white/25 bg-white/10 text-white;
+  }
+  .btn-ghost:active {
+    transform: scale(0.96);
+  }
+  .btn-ghost:focus-visible {
+    outline: 2px solid rgba(167, 139, 250, 0.8);
+    outline-offset: 2px;
+  }
+
+  /* Input glass */
+  .input-glass {
+    @apply w-full bg-night/70 border border-white/10 rounded-xl px-4 py-3 text-white outline-none placeholder:text-white/40 transition-all duration-200 text-lg;
+  }
+  .input-glass:focus {
+    @apply border-heart/70;
+    box-shadow:
+      0 0 0 3px rgba(255, 46, 136, 0.12),
+      0 0 26px -6px rgba(255, 46, 136, 0.4);
+  }
+}

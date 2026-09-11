@@ -1,0 +1,49 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  overflow: hidden;
+}
+
+main {
+  background: transparent;
+}
+
+.camera-box {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 3px dashed rgba(255, 92, 157, 0.4);
+  border-radius: 1rem;
+  background: rgba(11, 7, 22, 0.45);
+  backdrop-filter: blur(2px);
+  color: rgba(199, 183, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  user-select: none;
+  pointer-events: none;
+  box-shadow: inset 0 0 60px -30px rgba(255, 46, 136, 0.4);
+}
+
+.body-scroll {
+  scrollbar-width: none;
+}
+.body-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

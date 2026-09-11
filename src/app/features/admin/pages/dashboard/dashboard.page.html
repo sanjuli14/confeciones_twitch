@@ -1,0 +1,112 @@
+<div class="scene-bg min-h-dvh flex flex-col">
+  <!-- Blobs de luz animados -->
+  <div
+    class="blob w-[360px] h-[360px] bg-heart/20 left-[-130px] top-[8%]"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="blob w-[420px] h-[420px] bg-[#3b2d7a]/40 right-[-150px] top-[35%]"
+    style="animation-delay: -9s"
+    aria-hidden="true"
+  ></div>
+
+  <header
+    class="relative z-10 sticky top-0 glass border-x-0 border-t-0 rounded-none border-b border-white/10 px-6 py-4 flex items-center justify-between backdrop-blur-xl"
+  >
+    <div class="min-w-0">
+      <h1 class="font-display font-bold text-3xl sm:text-4xl flex items-center gap-2.5 drop-shadow-[0_0_20px_rgba(255,46,136,0.35)]">
+        <lucide-angular [img]="Heart" [size]="28" class="text-heart shrink-0 drop-shadow-[0_0_12px_rgba(255,46,136,0.8)]" />
+        <span class="truncate">Panel del <span class="glow-text">Doctor Amor</span></span>
+      </h1>
+      <p class="text-base text-white/60 truncate">{{ userEmail() }}</p>
+    </div>
+    <button
+      (click)="logout()"
+      class="btn-ghost px-4 py-2 text-sm shrink-0"
+    >
+      <lucide-angular [img]="LogOut" [size]="16" />
+      Cerrar sesión
+    </button>
+  </header>
+
+  <main class="relative z-10 w-full max-w-6xl mx-auto px-6 py-8 space-y-8 flex-1">
+    <!-- Stats -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4" aria-label="Resumen de cola">
+      <div class="glass p-5 flex items-center gap-4">
+        <span
+          class="w-12 h-12 rounded-xl bg-heart/15 border border-heart/30 text-heart flex items-center justify-center shrink-0 shadow-[0_0_18px_-4px_rgba(255,46,136,0.7)]"
+        >
+          <lucide-angular [img]="Clock" [size]="24" />
+        </span>
+        <div class="min-w-0">
+          <p class="text-3xl font-display font-bold leading-none">{{ counts().pending }}</p>
+          <p class="text-base text-white/60 mt-1">Pendientes</p>
+        </div>
+      </div>
+
+      <div class="glass p-5 flex items-center gap-4">
+        <span
+          class="w-12 h-12 rounded-xl bg-leaf/15 border border-leaf/30 text-leaf flex items-center justify-center shrink-0 shadow-[0_0_18px_-4px_rgba(32,224,138,0.7)]"
+        >
+          <lucide-angular [img]="CheckCheck" [size]="24" />
+        </span>
+        <div class="min-w-0">
+          <p class="text-3xl font-display font-bold leading-none">{{ counts().approved }}</p>
+          <p class="text-base text-white/60 mt-1">En cola</p>
+        </div>
+      </div>
+
+      <div class="glass p-5 flex items-center gap-4">
+        <span
+          class="w-12 h-12 rounded-xl bg-flame/15 border border-flame/30 text-flame flex items-center justify-center shrink-0 shadow-[0_0_18px_-4px_rgba(255,106,61,0.7)]"
+        >
+          <lucide-angular [img]="CircleX" [size]="24" />
+        </span>
+        <div class="min-w-0">
+          <p class="text-3xl font-display font-bold leading-none">{{ counts().rejected }}</p>
+          <p class="text-base text-white/60 mt-1">Rechazadas</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <app-queue-tabs [active]="tab()" [counts]="counts()" (selected)="tab.set($event)" />
+
+      <span class="text-base text-white/60 inline-flex items-center gap-2">
+        <lucide-angular [img]="Heart" [size]="16" class="text-heart" />
+        Solo moderación · para sacarlas a pantalla usa el botón del overlay
+      </span>
+    </div>
+
+    @if (filtered().length === 0) {
+      <div class="text-center py-16 space-y-4 animate-[card-in_.5s_ease-out]">
+        <div class="relative inline-flex items-center justify-center" aria-hidden="true">
+          <div class="absolute inset-0 rounded-full bg-heart/20 blur-2xl"></div>
+          <lucide-angular
+            [img]="Inbox"
+            [size]="64"
+            class="relative text-white/25 drop-shadow-[0_0_24px_rgba(255,46,136,0.5)]"
+          />
+        </div>
+        <p class="text-2xl font-display text-white/70">
+          {{ tab() === 'approved'
+            ? 'No hay aprobadas en cola.'
+            : 'No hay confesiones en esta categoría.' }}
+        </p>
+        <p class="font-script text-3xl text-soft/70">
+          Esperando nuevas historias del chat…
+        </p>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        @for (confession of filtered(); track confession.id) {
+          <app-confession-card
+            [confession]="confession"
+            (approve)="approve($event)"
+            (reject)="reject($event)"
+          />
+        }
+      </div>
+    }
+  </main>
+</div>

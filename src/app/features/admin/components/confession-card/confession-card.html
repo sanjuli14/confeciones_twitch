@@ -1,0 +1,78 @@
+<article
+  class="glass p-5 space-y-4 transition-all duration-300 hover:-translate-y-1 hover:border-heart/50 hover:shadow-[0_0_40px_-10px_rgba(255,46,136,0.5)] min-w-0 break-words"
+>
+  <header class="flex items-start justify-between gap-3">
+    <div class="min-w-0">
+      <h3 class="font-display font-bold text-4xl leading-snug break-words drop-shadow-[0_0_14px_rgba(255,46,136,0.25)]">
+        {{ confession().title }}
+      </h3>
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mt-2.5">
+        <span
+          class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold border border-neon/30 bg-neon/10 text-soft"
+        >
+          <lucide-angular [img]="categoryIcon(confession().category)" [size]="13" />
+          {{ categoryLabel(confession().category) }}
+        </span>
+        <span class="text-base text-white/75">{{ confession().nickname }}</span>
+      </div>
+    </div>
+    <time
+      class="text-sm text-white/60 shrink-0 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 tabular-nums"
+    >
+      {{ confession().created_at | date: 'HH:mm' }}
+    </time>
+  </header>
+
+  <p class="text-lg text-white/85 leading-relaxed break-words">
+    {{ expanded() ? confession().body : bodyPreview }}
+  </p>
+
+  @if (isLong) {
+    <button
+      (click)="toggleExpanded()"
+      class="inline-flex items-center gap-1.5 text-leaf text-sm font-bold hover:text-leaf/80 transition-colors"
+    >
+      <lucide-angular [img]="expanded() ? ChevronUp : ChevronDown" [size]="16" />
+      {{ expanded() ? 'Ver menos' : 'Ver confesión completa' }}
+    </button>
+  }
+
+  <footer class="flex flex-wrap gap-2 pt-1">
+    @if (confession().status === 'pending') {
+      <button
+        (click)="approve.emit(confession())"
+        class="inline-flex items-center gap-1.5 text-base font-semibold rounded-lg px-4 py-2 transition-all duration-200 active:scale-95 border border-leaf/40 bg-leaf/15 hover:bg-leaf/25 text-leaf hover:shadow-[0_0_20px_-6px_rgba(32,224,138,0.7)]"
+      >
+        <lucide-angular [img]="Check" [size]="14" />
+        Aprobar
+      </button>
+      <button
+        (click)="reject.emit(confession())"
+        class="inline-flex items-center gap-1.5 text-base font-semibold rounded-lg px-4 py-2 transition-all duration-200 active:scale-95 border border-flame/40 bg-flame/15 hover:bg-flame/25 text-flame hover:shadow-[0_0_20px_-6px_rgba(255,106,61,0.7)]"
+      >
+        <lucide-angular [img]="X" [size]="14" />
+        Rechazar
+      </button>
+    }
+
+    @if (confession().status === 'approved') {
+      <button
+        (click)="reject.emit(confession())"
+        class="inline-flex items-center gap-1.5 text-base font-semibold rounded-lg px-4 py-2 transition-all duration-200 active:scale-95 border border-flame/40 bg-flame/15 hover:bg-flame/25 text-flame hover:shadow-[0_0_20px_-6px_rgba(255,106,61,0.7)]"
+      >
+        <lucide-angular [img]="X" [size]="14" />
+        Quitar de la cola
+      </button>
+    }
+
+    @if (confession().status === 'rejected') {
+      <button
+        (click)="approve.emit(confession())"
+        class="inline-flex items-center gap-1.5 text-base font-semibold rounded-lg px-4 py-2 transition-all duration-200 active:scale-95 border border-leaf/40 bg-leaf/15 hover:bg-leaf/25 text-leaf hover:shadow-[0_0_20px_-6px_rgba(32,224,138,0.7)]"
+      >
+        <lucide-angular [img]="RotateCcw" [size]="14" />
+        Restaurar
+      </button>
+    }
+  </footer>
+</article>

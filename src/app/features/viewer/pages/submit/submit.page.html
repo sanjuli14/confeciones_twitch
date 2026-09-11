@@ -1,0 +1,201 @@
+<div class="scene-bg min-h-dvh flex flex-col items-center justify-center px-4 py-10">
+  <!-- Blobs de luz animados -->
+  <div
+    class="blob w-[340px] h-[340px] bg-heart/25 left-[-110px] top-[12%]"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="blob w-[400px] h-[400px] bg-[#3b2d7a]/50 right-[-130px] top-[55%]"
+    style="animation-delay: -6s"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="blob w-[260px] h-[260px] bg-neon/30 left-[30%] bottom-[-120px]"
+    style="animation-delay: -11s"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Corazones flotantes decorativos -->
+  <div class="heart-float left-[7%] top-[16%]" style="animation-delay: -2s" aria-hidden="true">
+    <lucide-angular [img]="Heart" [size]="26" class="text-heart" />
+  </div>
+  <div class="heart-float right-[10%] top-[22%]" style="animation-delay: -5s" aria-hidden="true">
+    <lucide-angular [img]="Heart" [size]="20" class="text-rose" />
+  </div>
+  <div class="heart-float left-[12%] bottom-[14%]" style="animation-delay: -8s" aria-hidden="true">
+    <lucide-angular [img]="Heart" [size]="22" class="text-soft" />
+  </div>
+
+  <div
+    class="relative z-10 w-full max-w-lg animate-[card-in_.6s_ease-out]"
+  >
+    @if (submitted()) {
+      <app-success-card (reset)="resetForm()" />
+    } @else {
+      <div class="w-full">
+        <header class="text-center mb-8">
+          <p class="text-sm tracking-[0.25em] uppercase text-soft/80 mb-4">
+            Twitch · Stream · Veredicto
+          </p>
+
+          <!-- Sello de cera rosa -->
+          <div class="relative inline-flex items-center justify-center mb-6" aria-hidden="true">
+            <div
+              class="absolute inset-0 rounded-full bg-gradient-to-br from-rose via-heart to-neon opacity-70 blur-xl"
+            ></div>
+            <div
+              class="relative w-[76px] h-[76px] rounded-full bg-gradient-to-br from-rose via-heart to-[#7c3aed] flex items-center justify-center rotate-3 shadow-[0_0_38px_-6px_rgba(255,46,136,0.85)]"
+            >
+              <lucide-angular
+                [img]="MessageSquareHeart"
+                [size]="34"
+                class="text-white -rotate-3 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]"
+              />
+            </div>
+          </div>
+
+          <h1
+            class="text-5xl sm:text-6xl font-display font-bold leading-tight drop-shadow-[0_0_30px_rgba(255,46,136,0.4)]"
+          >
+            Consultorio
+            <span class="glow-text block sm:inline"
+              >del <span class="font-script">Amor</span></span
+            >
+          </h1>
+
+          <p class="text-xl sm:text-2xl text-white/90 mt-5">
+            Cuéntanos tu historia de forma 100% anónima. El Doctor Amor la leerá en directo.
+          </p>
+        </header>
+
+        <form
+          [formGroup]="form"
+          (ngSubmit)="onSubmit()"
+          class="glass p-6 sm:p-7 space-y-5"
+        >
+          @if (error()) {
+            <div
+              class="text-base text-flame bg-flame/10 border border-flame/30 rounded-lg px-4 py-3"
+            >
+              {{ error() }}
+            </div>
+          }
+
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-lg font-semibold text-white/90">Categoría</label>
+              <span class="text-sm text-white/40">¿Cómo duele?</span>
+            </div>
+            <div
+              class="grid grid-cols-2 gap-2.5"
+              role="radiogroup"
+              aria-label="Categoría"
+            >
+              @for (cat of categories; track cat.id) {
+                <button
+                  type="button"
+                  role="radio"
+                  [attr.aria-checked]="form.controls.category.value === cat.id"
+                  (click)="form.controls.category.setValue(cat.id)"
+                  class="group flex flex-col items-start gap-2 rounded-xl px-3.5 py-3 text-left border min-h-[76px] transition-all duration-200 active:scale-95"
+                  [class]="
+                    form.controls.category.value === cat.id
+                      ? 'border-heart/80 bg-heart/10 text-white shadow-[0_0_20px_-6px_rgba(255,46,136,0.7)]'
+                      : 'border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:border-neon/40'
+                  "
+                >
+                  <lucide-angular
+                    [img]="categoryIcon(cat.id)"
+                    [size]="20"
+                    class="shrink-0"
+                    [class]="
+                      form.controls.category.value === cat.id
+                        ? 'text-heart drop-shadow-[0_0_10px_rgba(255,46,136,0.7)]'
+                        : 'text-soft/70'
+                    "
+                  />
+                  <span class="text-sm leading-tight font-semibold">{{ cat.label }}</span>
+                </button>
+              }
+            </div>
+          </div>
+
+          <div>
+            <label for="title" class="block text-lg font-semibold text-white/90 mb-2">
+              Título de tu historia
+            </label>
+            <input
+              id="title"
+              type="text"
+              formControlName="title"
+              placeholder="Ej: Mi novio no me presenta a sus amigos…"
+              maxlength="120"
+              class="input-glass"
+            />
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-2">
+              <label for="body" class="block text-lg font-semibold text-white/90">
+                Tu confesión
+              </label>
+              <span
+                class="text-base"
+                [class.text-flame]="remainingChars < 100"
+                [class.text-white/60]="remainingChars >= 100"
+              >
+                {{ remainingChars }} caracteres restantes
+              </span>
+            </div>
+            <textarea
+              id="body"
+              formControlName="body"
+              rows="5"
+              placeholder="Cuenta la historia completa… (separa párrafos con una línea en blanco)"
+              maxlength="3000"
+              class="input-glass resize-none"
+            ></textarea>
+          </div>
+
+          <div>
+            <label for="nickname" class="block text-lg font-semibold text-white/90 mb-2">
+              Pseudónimo <span class="text-white/40 font-normal">(opcional)</span>
+            </label>
+            <input
+              id="nickname"
+              type="text"
+              formControlName="nickname"
+              placeholder="Anónimo"
+              maxlength="50"
+              class="input-glass"
+            />
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="form.invalid || sending()"
+            class="btn-glow w-full py-4"
+          >
+            @if (!sending()) {
+              <lucide-angular [img]="Send" [size]="22" />
+            } @else {
+              <span class="inline-block w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+            }
+            {{ sending() ? 'Enviando…' : 'Enviar confesión' }}
+          </button>
+
+          <p class="text-base text-center text-white/70 inline-flex items-center justify-center gap-2 w-full">
+            <lucide-angular [img]="Lock" [size]="16" class="shrink-0" />
+            100% anónimo · sin registro · solo verás tu confesión si sale en pantalla
+          </p>
+        </form>
+
+        <p
+          class="text-center font-script text-3xl text-rose/90 mt-7 drop-shadow-[0_0_18px_rgba(255,46,136,0.4)]"
+        >
+          Sé valiente, el Doctor Amor está escuchando…
+        </p>
+      </div>
+    }
+  </div>
+</div>

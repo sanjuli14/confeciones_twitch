@@ -1,0 +1,108 @@
+<main
+  class="w-[1920px] h-[1080px] overflow-hidden relative flex items-center justify-center"
+>
+  <!-- Brillos decorativos translúcidos (lazo visual con el resto de la web, sin fondo) -->
+  <div
+    class="absolute -top-52 -left-52 w-[560px] h-[560px] rounded-full bg-heart/10 blur-[130px] pointer-events-none"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="absolute -bottom-40 right-0 w-[460px] h-[460px] rounded-full bg-neon/10 blur-[130px] pointer-events-none"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Cámaras de los streamers (espacios reservados, a la derecha hacia abajo) -->
+  <div class="absolute right-0 top-6 flex flex-col gap-8 w-[420px]">
+    <div class="camera-box">
+      <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
+      <span class="font-script text-4xl">Cámara 1</span>
+    </div>
+    <div class="camera-box">
+      <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
+      <span class="font-script text-4xl">Cámara 2</span>
+    </div>
+    <div class="camera-box">
+      <lucide-angular [img]="Camera" [size]="56" class="text-white/50" />
+      <span class="font-script text-4xl">Cámara 3</span>
+    </div>
+  </div>
+
+  <!-- Control del streamer: traer la siguiente confesión de la cola -->
+  <div
+    class="absolute bottom-6 left-6 flex items-center gap-4 bg-[#0b0716]/80 border border-heart/25 rounded-full pl-5 pr-2 py-2 backdrop-blur-md shadow-[0_0_30px_-10px_rgba(255,46,136,0.5)]"
+  >
+    <span class="text-white/70 text-lg inline-flex items-center gap-2">
+      <lucide-angular [img]="ListOrdered" [size]="20" class="text-soft" />
+      En cola:
+      <span class="font-bold text-white">{{ queueLength() }}</span>
+    </span>
+    <button
+      (click)="bringNext()"
+      [disabled]="queueLength() === 0 || bringing()"
+      class="bg-heart hover:bg-heart/80 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-full px-6 py-2.5 transition-all shrink-0 inline-flex items-center gap-2 text-lg shadow-[0_0_24px_-4px_rgba(255,46,136,0.7)] hover:shadow-[0_0_32px_-4px_rgba(255,46,136,0.9)]"
+    >
+      <lucide-angular [img]="Play" [size]="20" />
+      {{ bringing() ? 'Trayendo…' : 'Traer siguiente' }}
+    </button>
+  </div>
+
+  @if (current(); as confession) {
+    @for (c of [confession]; track c.id) {
+    <section
+      class="max-w-[950px] w-full px-16 py-14 rounded-[2rem] border-2 border-heart/60 bg-[#0b0716]/85 backdrop-blur-md shadow-[0_0_90px_-10px_rgba(255,46,136,0.5)] animate-[card-in_.55s_cubic-bezier(.22,1,.36,1)]"
+    >
+      <header class="flex items-center gap-5 mb-10">
+        <span
+          class="inline-flex items-center gap-2.5 border border-neon/40 bg-neon/10 text-soft rounded-full px-6 py-2 text-xl font-bold tracking-wide uppercase shadow-[0_0_24px_-8px_rgba(167,139,250,0.8)]"
+        >
+          <lucide-angular [img]="Heart" [size]="20" class="text-heart" />
+          {{ categoryLabel(confession.category) }}
+        </span>
+        <span class="text-white/80 text-2xl">{{ confession.nickname }}</span>
+        <span class="ml-auto text-white/60 text-xl tabular-nums">
+          {{ confession.created_at | date: 'HH:mm' }}
+        </span>
+      </header>
+
+      <h1
+        class="font-display font-bold text-8xl leading-tight mb-12 break-words drop-shadow-[0_0_30px_rgba(255,46,136,0.4)]"
+      >
+        {{ confession.title }}
+      </h1>
+
+      <div class="body-scroll max-h-[520px] overflow-y-auto">
+        <p class="text-white text-3xl leading-relaxed font-medium break-words">
+          {{ expanded() ? confession.body : bodyPreview }}
+        </p>
+      </div>
+
+      @if (isLong) {
+        <button
+          (click)="toggleExpanded()"
+          class="mt-8 inline-flex items-center gap-2 text-white/70 hover:text-white text-2xl font-medium transition-colors hover:text-heart"
+        >
+          <lucide-angular [img]="expanded() ? ChevronUp : ChevronDown" [size]="24" />
+          {{ expanded() ? 'Ver menos' : 'Ver confesión completa' }}
+        </button>
+      }
+    </section>
+    }
+  } @else {
+    <div class="text-center space-y-6 animate-pulse">
+      <div class="relative inline-flex items-center justify-center" aria-hidden="true">
+        <div class="absolute inset-0 rounded-full bg-heart/40 blur-3xl"></div>
+        <lucide-angular
+          [img]="Heart"
+          [size]="120"
+          class="relative text-white drop-shadow-[0_0_40px_rgba(255,46,136,0.7)]"
+        />
+      </div>
+      <p class="font-script text-9xl text-white drop-shadow-[0_0_30px_rgba(255,46,136,0.5)]">
+        Consultorio del Amor
+      </p>
+      <p class="text-2xl text-white/60 font-body">
+        Esperando a que el streamer traiga la primera confesión…
+      </p>
+    </div>
+  }
+</main>

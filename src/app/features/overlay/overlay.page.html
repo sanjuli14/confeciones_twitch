@@ -1,16 +1,8 @@
 <main
+  [style.transform]="'scale(' + stageScale() + ')'"
+  style="transform-origin: center center"
   class="w-[1920px] h-[1080px] overflow-hidden relative flex items-center justify-center"
 >
-  <!-- Brillos decorativos translúcidos (lazo visual con el resto de la web, sin fondo) -->
-  <div
-    class="absolute -top-52 -left-52 w-[560px] h-[560px] rounded-full bg-heart/10 blur-[130px] pointer-events-none"
-    aria-hidden="true"
-  ></div>
-  <div
-    class="absolute -bottom-40 right-0 w-[460px] h-[460px] rounded-full bg-neon/10 blur-[130px] pointer-events-none"
-    aria-hidden="true"
-  ></div>
-
   <!-- Cámaras de los streamers (espacios reservados, a la derecha hacia abajo) -->
   <div class="absolute right-0 top-6 flex flex-col gap-8 w-[420px]">
     <div class="camera-box">
